@@ -37,12 +37,6 @@ public class Vector2d {
     }
 
     public Vector2d upperRight(Vector2d other) {
-        /* if (vector2d.x <= other.x) {
-            vector2d.x = other.x;
-        }
-        if (vector2d.y <= other.y) {
-            vector2d.y = other.y;
-        } */
         if (this.x <= other.x && this.y <= other.y) {
             return new Vector2d(other.x, other.y);
         } else if (this.x >= other.x && this.y <= other.y) {
@@ -54,12 +48,6 @@ public class Vector2d {
     }
 
     public Vector2d lowerLeft(Vector2d other) {
-        /* if (vector2d.x >= other.x) {
-            vector2d.x = other.x;
-        }
-        if (vector2d.y >= other.y) {
-            vector2d.y = other.y;
-        } */
         if (this.x >= other.x && this.y >= other.y) {
             return new Vector2d(other.x, other.y);
         } else if (this.x <= other.x && this.y >= other.y) {
