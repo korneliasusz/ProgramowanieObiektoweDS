@@ -13,27 +13,19 @@ public class Vector2d {
     }
 
     public boolean precedes(Vector2d other) {
-        if (this.x <= other.x && this.y <= other.y) {
-            return true;
-        }
-        return false;
+        return this.x <= other.x && this.y <= other.y;
     }
 
     public boolean follows(Vector2d other) {
-        if (this.x >= other.x && this.y >= other.y) {
-            return true;
-        }
-        return false;
+        return this.x >= other.x && this.y >= other.y;
     }
 
     public Vector2d add(Vector2d other) {
-        Vector2d vector2d = new Vector2d(this.x + other.x, this.y + other.y);
-        return vector2d;
+        return new Vector2d(this.x + other.x, this.y + other.y);
     }
 
     public Vector2d subtract(Vector2d other) {
-        Vector2d vector2d = new Vector2d(this.x - other.x, this.y - other.y);
-        return vector2d;
+        return new Vector2d(this.x - other.x, this.y - other.y);
     }
 
     public Vector2d upperRight(Vector2d other) {
@@ -59,8 +51,7 @@ public class Vector2d {
     }
 
     public Vector2d opposite() {
-        Vector2d vector2d = new Vector2d(-this.x, -this.y);
-        return vector2d;
+        return new Vector2d(-this.x, -this.y);
     }
 
     @Override
