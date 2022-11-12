@@ -38,6 +38,13 @@ public class World {
         }
         System.out.println("Zwierze 1: " + a1);
 
+        Animal a3 = new Animal(MapDirection.SOUTH, new Vector2d(4,0));
+        System.out.println(a3);
+        a3.move(MoveDirection.FORWARD);
+        System.out.println(a3);
+        a3.move(MoveDirection.BACKWARD);
+        System.out.println(a3);
+
     }
 
 }
