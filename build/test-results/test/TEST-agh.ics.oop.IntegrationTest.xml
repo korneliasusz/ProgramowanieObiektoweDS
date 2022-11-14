@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="agh.ics.oop.IntegrationTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2022-11-01T15:18:56" hostname="LAPTOP-3L9EERBL" time="0.03">
+<testsuite name="agh.ics.oop.IntegrationTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2022-11-13T23:44:57" hostname="LAPTOP-3L9EERBL" time="0.034">
   <properties/>
-  <testcase name="RightDataParseTest()" classname="agh.ics.oop.IntegrationTest" time="0.021"/>
-  <testcase name="RightOrientationTest()" classname="agh.ics.oop.IntegrationTest" time="0.003"/>
-  <testcase name="NotOutOfMapTest()" classname="agh.ics.oop.IntegrationTest" time="0.002"/>
-  <testcase name="RightPositionTest()" classname="agh.ics.oop.IntegrationTest" time="0.001"/>
+  <testcase name="PlaceTest()" classname="agh.ics.oop.IntegrationTest" time="0.034"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

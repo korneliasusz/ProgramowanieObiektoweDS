@@ -8,46 +8,68 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class IntegrationTest {
 
-    Animal a1 = new Animal();
-    Animal a2 = new Animal(MapDirection.EAST, new Vector2d(1,3));
-    String[] directions = {"r", "f", "a", "l", "L", "f", "l", "b"};
-    OptionsParser parser = new OptionsParser();
-    List<MoveDirection> direct = List.of(MoveDirection.RIGHT, MoveDirection.FORWARD, MoveDirection.LEFT, MoveDirection.FORWARD, MoveDirection.LEFT, MoveDirection.BACKWARD);
-
-    @Test
-    public void RightOrientationTest() {
-        a2.move(MoveDirection.RIGHT);
-        assertEquals(MapDirection.SOUTH, a2.orientation);
-
-        a1.move(MoveDirection.LEFT);
-        a1.move(MoveDirection.LEFT);
-        a1.move(MoveDirection.LEFT);
-        assertEquals(MapDirection.EAST, a1.orientation);
-    }
 
     @Test
     public void RightPositionTest() {
-        a1.move(MoveDirection.LEFT);
-        assertTrue(a1.isAt(new Vector2d(2,2)));
-        a1.move(MoveDirection.FORWARD);
-        assertTrue(a1.isAt(new Vector2d(1,2)));
+        String[] args = {"f", "b", "r", "l", "f", "f", "r", "r", "f", "f", "f", "f", "f", "f", "f", "f"};
+        List<MoveDirection> directions = new OptionsParser().parse(args);
+        IWorldMap map = new RectangularMap(10, 5);
+        Vector2d[] positions = { new Vector2d(2,2), new Vector2d(3,4) };
+        IEngine engine = new SimulationEngine(directions, map, positions);
+        engine.run();
 
-        a2.move(MoveDirection.BACKWARD);
-        assertFalse(a2.isAt(new Vector2d(1,3)));
+        assertTrue(map.isOccupied(new Vector2d(2,0)));
+        assertTrue(map.isOccupied(new Vector2d(3,5)));
     }
 
     @Test
     public void NotOutOfMapTest() {
-        for (int i = 0; i < 5; i++) {
-            a1.move(MoveDirection.FORWARD);
-            a2.move(MoveDirection.BACKWARD);
+        String[] args = {"f", "b", "r", "l", "f", "f", "r", "r", "f", "f", "f", "f", "f", "f", "f", "f"};
+        List<MoveDirection> directions = new OptionsParser().parse(args);
+        IWorldMap map = new RectangularMap(10, 5);
+        // poczatkowe pozycje zwierzat poza mapa
+        Vector2d[] positions = { new Vector2d(20,20), new Vector2d(30,40) };
+        IEngine engine = new SimulationEngine(directions, map, positions);
+        engine.run();
+
+        // weryfikacja czy zadne z pol na mapie nie jest zajete
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 5; j++) {
+                assertFalse(map.isOccupied(new Vector2d(i, j)));
+            }
         }
-        assertTrue(a1.position.x <= 4 && a1.position.y <= 4);
-        assertFalse(a2.position.x == -4 && a2.position.y == 3);
     }
 
     @Test
-    public void RightDataParseTest() {
-        assertEquals(direct, parser.parse(directions));
+    public void SamePositionTest() {
+        String[] args = {};
+        List<MoveDirection> directions = new OptionsParser().parse(args);
+        IWorldMap map = new RectangularMap(10, 5);
+        Vector2d[] positions = { new Vector2d(2,2), new Vector2d(3,4) };
+        IEngine engine = new SimulationEngine(directions, map, positions);
+        engine.run();
+
+        assertFalse(map.canMoveTo(new Vector2d(2,2)));
+        assertFalse(map.canMoveTo(new Vector2d(3,4)));
+    }
+
+    @Test
+    public void ObjectAtTest() {
+        String[] args = {};
+        List<MoveDirection> directions = new OptionsParser().parse(args);
+        IWorldMap map = new RectangularMap(10, 5);
+        Vector2d[] positions = { new Vector2d(2,2), new Vector2d(3,4) };
+        IEngine engine = new SimulationEngine(directions, map, positions);
+        engine.run();
+
+        assertSame(map.objectAt(new Vector2d(2, 2)).getClass(), Animal.class);
+    }
+
+    @Test
+    public void ParserTest() {
+        String[] args = {"f", "b", "r", "l", "f", "f", "r", "r", "f", "f", "f", "f", "f", "f", "f", "f"};
+        List<MoveDirection> directions = new OptionsParser().parse(args);
+        List<MoveDirection> direct = List.of(MoveDirection.FORWARD, MoveDirection.BACKWARD, MoveDirection.RIGHT, MoveDirection.LEFT, MoveDirection.FORWARD, MoveDirection.FORWARD, MoveDirection.RIGHT, MoveDirection.RIGHT, MoveDirection.FORWARD, MoveDirection.FORWARD, MoveDirection.FORWARD, MoveDirection.FORWARD, MoveDirection.FORWARD, MoveDirection.FORWARD, MoveDirection.FORWARD, MoveDirection.FORWARD);
+        assertEquals(direct, directions);
     }
 }
