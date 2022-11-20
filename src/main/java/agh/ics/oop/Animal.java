@@ -2,9 +2,9 @@ package agh.ics.oop;
 
 import java.util.Vector;
 
-public class Animal {
+public class Animal extends AbstractWorldMapElement {
     private MapDirection orientation = MapDirection.NORTH;
-    private Vector2d position = new Vector2d(2,2);
+    //private Vector2d position = new Vector2d(2,2);
     private IWorldMap map;
 
     // konstruktor bezparametrowy nie ma sensu, poniewaz mapa nie ma automatycznie przypisanej wartosci,
@@ -14,6 +14,7 @@ public class Animal {
 
     public Animal(IWorldMap map) {
         this.map = map;
+        position = new Vector2d(2,2);
     }
 
     public Animal(IWorldMap map, Vector2d initialPosition) {
@@ -21,12 +22,9 @@ public class Animal {
         position = initialPosition;
     }
 
+    @Override
     public Vector2d getPosition() {
         return position;
-    }
-
-    public MapDirection getOrientation() {
-        return orientation;
     }
 
     public boolean isAt(Vector2d position) {
@@ -62,9 +60,5 @@ public class Animal {
     public String toString() {
         return orientation.toString();
 
-       /* return "{" +
-                "Orientacja: " + orientation +
-                ", Pozycja: " + position +
-                '}';*/
     }
 }
