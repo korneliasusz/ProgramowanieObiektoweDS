@@ -1,10 +1,12 @@
 package agh.ics.oop;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Animal extends AbstractWorldMapElement {
     private MapDirection orientation = MapDirection.NORTH;
     //private Vector2d position = new Vector2d(2,2);
+    private List<IPositionChangeObserver> observers = new ArrayList<>();
     private IWorldMap map;
 
     // konstruktor bezparametrowy nie ma sensu, poniewaz mapa nie ma automatycznie przypisanej wartosci,
@@ -56,9 +58,22 @@ public class Animal extends AbstractWorldMapElement {
         }
     }
 
+    public void addObserver(IPositionChangeObserver observer) {
+        observers.add(observer);
+    }
+
+    public void removeObserver(IPositionChangeObserver observer) {
+        observers.remove(observer);
+    }
+
+    public void positionChanged(Vector2d newPosition) {
+        for (IPositionChangeObserver observer : observers) {
+            observer.positionChanged(position, newPosition);
+        }
+    }
+
     @Override
     public String toString() {
         return orientation.toString();
-
     }
 }

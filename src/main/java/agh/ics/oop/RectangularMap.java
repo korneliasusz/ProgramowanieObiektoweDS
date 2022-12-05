@@ -32,4 +32,5 @@ public class RectangularMap extends AbstractWorldMap {
     }
 
 
+
 }

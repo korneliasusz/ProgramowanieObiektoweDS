@@ -23,24 +23,6 @@ public class IntegrationTest {
     }
 
     @Test
-    public void NotOutOfMapTest() {
-        String[] args = {"f", "b", "r", "l", "f", "f", "r", "r", "f", "f", "f", "f", "f", "f", "f", "f"};
-        List<MoveDirection> directions = new OptionsParser().parse(args);
-        IWorldMap map = new RectangularMap(10, 5);
-        // poczatkowe pozycje zwierzat poza mapa
-        Vector2d[] positions = { new Vector2d(20,20), new Vector2d(30,40) };
-        IEngine engine = new SimulationEngine(directions, map, positions);
-        engine.run();
-
-        // weryfikacja czy zadne z pol na mapie nie jest zajete
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 5; j++) {
-                assertFalse(map.isOccupied(new Vector2d(i, j)));
-            }
-        }
-    }
-
-    @Test
     public void SamePositionTest() {
         String[] args = {};
         List<MoveDirection> directions = new OptionsParser().parse(args);

@@ -32,10 +32,13 @@ public class GrassField extends AbstractWorldMap {
         }
     }
 
-   private void addNewGrass(Vector2d position) {
-        while (!isOccupied(position)) {
-            grasses.add(new Grass(position));
-            if (grasses.size() == grassInt) { break; }
+   private void addNewGrass() {
+        Vector2d position = new Vector2d(generateRandInt(), generateRandInt());
+        while (grasses.size() < grassInt) {
+            if (!isOccupied(position)) {
+                grasses.add(new Grass(position));
+            }
+            position = new Vector2d(generateRandInt(), generateRandInt());
         }
     }
 
@@ -43,11 +46,15 @@ public class GrassField extends AbstractWorldMap {
     public boolean place(Animal animal) {
         if (!super.place(animal)) {
             if (!objectAt(animal.getPosition()).getClass().equals(Animal.class)) {
-                animals.add(animal);
+                animals.put(animal.getPosition(), animal);
+                return true;
+            } else if (objectAt(animal.getPosition()).getClass().equals(Grass.class)) {
+                animals.put(animal.getPosition(), animal);
+                addNewGrass();
                 return true;
             }
         } else {
-            animals.add(animal);
+            animals.put(animal.getPosition(), animal);
             return true;
         }
         return false;
@@ -60,7 +67,7 @@ public class GrassField extends AbstractWorldMap {
             for (int i = 0; i < grasses.size(); i++) {
                 if (grasses.get(i).getPosition().equals(position)) {
                     grasses.remove(i);
-                    addNewGrass(new Vector2d(generateRandInt(), generateRandInt()));
+                    this.addNewGrass();
                     break;
                 }
             }
@@ -71,7 +78,7 @@ public class GrassField extends AbstractWorldMap {
 
     @Override
     public Object objectAt(Vector2d position) {
-        for (Animal animal : animals) {
+        for (Animal animal : animals.values()) {
             if (animal.getPosition().equals(position)) {
                 return animal;
             }
@@ -89,14 +96,15 @@ public class GrassField extends AbstractWorldMap {
     protected Vector2d getUpperRight() {
         Vector2d upperRight;
         if (!animals.isEmpty()) {
-            upperRight = animals.get(0).getPosition();
+            Animal animal = (Animal)animals.values().toArray()[0];
+            upperRight = animal.getPosition();
         } else if (!grasses.isEmpty()) {
             upperRight = grasses.get(0).getPosition();
         } else {
             upperRight = new Vector2d(10,10);
         }
 
-        for (Animal animal : animals) {
+        for (Animal animal : animals.values()) {
             upperRight = upperRight.upperRight(animal.getPosition());
         }
 
@@ -111,14 +119,16 @@ public class GrassField extends AbstractWorldMap {
     protected Vector2d getLowerLeft() {
             Vector2d lowerLeft;
             if (!animals.isEmpty()) {
-                lowerLeft = animals.get(0).getPosition();
+                //lowerLeft = animals.get(0).getPosition();
+                Animal animal = (Animal)animals.values().toArray()[0];
+                lowerLeft = animal.getPosition();
             } else if (!grasses.isEmpty()) {
                 lowerLeft = grasses.get(0).getPosition();
             } else {
                 lowerLeft = new Vector2d(0,0);
             }
 
-            for (Animal animal : animals) {
+            for (Animal animal : animals.values()) {
                 lowerLeft = lowerLeft.lowerLeft(animal.getPosition());
             }
 
@@ -128,4 +138,5 @@ public class GrassField extends AbstractWorldMap {
 
             return lowerLeft;
     }
+
 }
