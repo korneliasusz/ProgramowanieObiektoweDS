@@ -53,5 +53,8 @@ public class IntegrationTest {
         List<MoveDirection> directions = new OptionsParser().parse(args);
         List<MoveDirection> direct = List.of(MoveDirection.FORWARD, MoveDirection.BACKWARD, MoveDirection.RIGHT, MoveDirection.LEFT, MoveDirection.FORWARD, MoveDirection.FORWARD, MoveDirection.RIGHT, MoveDirection.RIGHT, MoveDirection.FORWARD, MoveDirection.FORWARD, MoveDirection.FORWARD, MoveDirection.FORWARD, MoveDirection.FORWARD, MoveDirection.FORWARD, MoveDirection.FORWARD, MoveDirection.FORWARD);
         assertEquals(direct, directions);
+
+        String[] args2 = {"f", "fds", "b", "r", "l", "f", "f", "r", "r", "f", "f", "f", "f", "f", "f", "f", "f"};
+        assertThrows(IllegalArgumentException.class, () -> new OptionsParser().parse(args2));
     }
 }

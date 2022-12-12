@@ -16,14 +16,14 @@ public class GrassFieldTest {
     @Test
     public void placeTest() {
         assertTrue(map.place(new Animal(map, new Vector2d(2,6))));
-        assertFalse(map.place(new Animal(map, new Vector2d(2,6))));
+        assertThrows(IllegalArgumentException.class, () -> map.place(new Animal(map, new Vector2d(2,6)))); // dodanie do mapy dwa razy tego samego zwierzecia
         assertTrue(map.place(new Animal(map, new Vector2d(12,25))));
     }
 
     @Test
     public void canMoveOnNotEmptyMapTest() {
         map.place(new Animal(map, new Vector2d(7,3)));
-        assertFalse(map.canMoveTo(new Vector2d(7,3)));
+        assertFalse(map.canMoveTo(new Vector2d(7,3))); //
         assertTrue(map.canMoveTo(new Vector2d(2,5)));
     }
 

@@ -18,12 +18,12 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     }
 
     @Override
-    public boolean place(Animal animal) {
+    public boolean place(Animal animal) throws IllegalArgumentException {
         if (!isOccupied(animal.getPosition()) && canMoveTo(animal.getPosition())) {
             animals.put(animal.getPosition(), animal);
             return true;
         }
-        return false;
+        throw new IllegalArgumentException("Animal can't be placed at " + animal.getPosition());
     }
 
     @Override
@@ -46,8 +46,8 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
         return mapVisualizer.draw(getLowerLeft(), getUpperRight());
     }
 
-    protected abstract Vector2d getLowerLeft();
-    protected abstract Vector2d getUpperRight();
+    public abstract Vector2d getLowerLeft();
+    public abstract Vector2d getUpperRight();
 
     public void positionChanged(Vector2d oldPosition, Vector2d newPosition) {
         Animal movedAnimal = animals.get(oldPosition);

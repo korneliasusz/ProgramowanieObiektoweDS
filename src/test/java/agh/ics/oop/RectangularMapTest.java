@@ -22,8 +22,8 @@ public class RectangularMapTest {
     public void placeTest() {
         assertTrue(map.place(new Animal(map, new Vector2d(7,3))));
         assertTrue(map.place(new Animal(map, new Vector2d(2,5))));
-        assertFalse(map.place(new Animal(map, new Vector2d(7,3))));
-        assertFalse(map.place(new Animal(map, new Vector2d(-5,4))));
+        assertThrows(IllegalArgumentException.class, () -> map.place(new Animal(map, new Vector2d(7,3))));
+        assertThrows(IllegalArgumentException.class, () -> map.place(new Animal(map, new Vector2d(-5,4))));
     }
 
     @Test
@@ -36,7 +36,6 @@ public class RectangularMapTest {
     @Test
     public void isOccupiedTest() {
         map.place(new Animal(map, new Vector2d(1,1)));
-        map.place(new Animal(map, new Vector2d(-1,-7)));
         assertTrue(map.isOccupied(new Vector2d(1,1)));
         assertFalse(map.isOccupied(new Vector2d(2,1)));
         assertFalse(map.isOccupied(new Vector2d(7,3)));

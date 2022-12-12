@@ -8,10 +8,17 @@ public class GrassField extends AbstractWorldMap {
 
     private int grassInt;
     private ArrayList<Grass> grasses = new ArrayList<>();
+    private MapBoundary mapBoundary;
 
     public GrassField(int grassInt) {
         this.grassInt = grassInt;
+        this.mapBoundary = new MapBoundary();
         placeGrasses();
+    }
+
+    public GrassField(MapBoundary mapBoundary, int grassInt) {
+        this.mapBoundary = mapBoundary;
+        this.grassInt = grassInt;
     }
 
     private int generateRandInt() {
@@ -28,7 +35,9 @@ public class GrassField extends AbstractWorldMap {
         }
 
         for (Vector2d position : positions) {
-            grasses.add(new Grass(position));
+            Grass grass = new Grass(position);
+            grasses.add(grass);
+            mapBoundary.addObject(grass);
         }
     }
 
@@ -36,29 +45,33 @@ public class GrassField extends AbstractWorldMap {
         Vector2d position = new Vector2d(generateRandInt(), generateRandInt());
         while (grasses.size() < grassInt) {
             if (!isOccupied(position)) {
-                grasses.add(new Grass(position));
+                Grass grass = new Grass(position);
+                grasses.add(grass);
+                mapBoundary.addObject(grass);
             }
             position = new Vector2d(generateRandInt(), generateRandInt());
         }
     }
 
     @Override
-    public boolean place(Animal animal) {
+    public boolean place(Animal animal) throws IllegalArgumentException {
         if (!super.place(animal)) {
             if (!objectAt(animal.getPosition()).getClass().equals(Animal.class)) {
                 animals.put(animal.getPosition(), animal);
+                mapBoundary.addObject(animal);
                 return true;
             } else if (objectAt(animal.getPosition()).getClass().equals(Grass.class)) {
                 animals.put(animal.getPosition(), animal);
                 addNewGrass();
+                mapBoundary.addObject(animal);
                 return true;
             }
         } else {
             animals.put(animal.getPosition(), animal);
+            mapBoundary.addObject(animal);
             return true;
         }
-        return false;
-
+        throw new IllegalArgumentException("Animal can't be placed at " + animal.getPosition());
     }
 
     @Override
@@ -88,55 +101,17 @@ public class GrassField extends AbstractWorldMap {
                 return grass;
             }
         }
-
         return null;
     }
 
     @Override
-    protected Vector2d getUpperRight() {
-        Vector2d upperRight;
-        if (!animals.isEmpty()) {
-            Animal animal = (Animal)animals.values().toArray()[0];
-            upperRight = animal.getPosition();
-        } else if (!grasses.isEmpty()) {
-            upperRight = grasses.get(0).getPosition();
-        } else {
-            upperRight = new Vector2d(10,10);
-        }
-
-        for (Animal animal : animals.values()) {
-            upperRight = upperRight.upperRight(animal.getPosition());
-        }
-
-        for (Grass grass : grasses) {
-            upperRight = upperRight.upperRight(grass.getPosition());
-        }
-
-        return upperRight;
+    public Vector2d getUpperRight() {
+        return mapBoundary.getUpperRight();
     }
 
     @Override
-    protected Vector2d getLowerLeft() {
-            Vector2d lowerLeft;
-            if (!animals.isEmpty()) {
-                //lowerLeft = animals.get(0).getPosition();
-                Animal animal = (Animal)animals.values().toArray()[0];
-                lowerLeft = animal.getPosition();
-            } else if (!grasses.isEmpty()) {
-                lowerLeft = grasses.get(0).getPosition();
-            } else {
-                lowerLeft = new Vector2d(0,0);
-            }
-
-            for (Animal animal : animals.values()) {
-                lowerLeft = lowerLeft.lowerLeft(animal.getPosition());
-            }
-
-            for (Grass grass : grasses) {
-                lowerLeft = lowerLeft.lowerLeft(grass.getPosition());
-            }
-
-            return lowerLeft;
+    public Vector2d getLowerLeft() {
+        return mapBoundary.getLowerLeft();
     }
 
 }
