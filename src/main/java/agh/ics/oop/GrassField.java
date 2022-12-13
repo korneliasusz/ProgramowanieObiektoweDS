@@ -106,12 +106,59 @@ public class GrassField extends AbstractWorldMap {
 
     @Override
     public Vector2d getUpperRight() {
-        return mapBoundary.getUpperRight();
+        Vector2d upperRight;
+        if (!animals.isEmpty()) {
+            Animal animal = (Animal)animals.values().toArray()[0];
+            upperRight = animal.getPosition();
+        } else if (!grasses.isEmpty()) {
+            upperRight = grasses.get(0).getPosition();
+        } else {
+            upperRight = new Vector2d(10,10);
+        }
+
+        for (Animal animal : animals.values()) {
+            upperRight = upperRight.upperRight(animal.getPosition());
+        }
+
+        for (Grass grass : grasses) {
+            upperRight = upperRight.upperRight(grass.getPosition());
+        }
+
+        return upperRight;
+        // return mapBoundary.getUpperRight();
     }
 
     @Override
     public Vector2d getLowerLeft() {
-        return mapBoundary.getLowerLeft();
+        Vector2d lowerLeft;
+        if (!animals.isEmpty()) {
+            //lowerLeft = animals.get(0).getPosition();
+            Animal animal = (Animal)animals.values().toArray()[0];
+            lowerLeft = animal.getPosition();
+        } else if (!grasses.isEmpty()) {
+            lowerLeft = grasses.get(0).getPosition();
+        } else {
+            lowerLeft = new Vector2d(0,0);
+        }
+
+        for (Animal animal : animals.values()) {
+            lowerLeft = lowerLeft.lowerLeft(animal.getPosition());
+        }
+
+        for (Grass grass : grasses) {
+            lowerLeft = lowerLeft.lowerLeft(grass.getPosition());
+        }
+
+        return lowerLeft;
+        // return mapBoundary.getLowerLeft();
     }
 
+    @Override
+    public void positionChanged(Vector2d oldPosition, Vector2d newPosition) {
+        super.positionChanged(oldPosition, newPosition);
+        if (grasses.contains(newPosition)) {
+            grasses.remove(newPosition);
+            addNewGrass();
+        }
+    }
 }

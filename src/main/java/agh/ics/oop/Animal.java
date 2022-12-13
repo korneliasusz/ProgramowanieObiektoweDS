@@ -30,6 +30,16 @@ public class Animal extends AbstractWorldMapElement {
         return position;
     }
 
+    @Override
+    public String getImagePath() {
+        return "src/main/resources/" + this.toString() + ".png";
+    }
+
+    @Override
+    public String getElementName() {
+        return "Z" + this.position.toString();
+    }
+
     public boolean isAt(Vector2d position) {
         return this.position.equals(position);
     }
